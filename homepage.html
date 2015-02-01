@@ -2,17 +2,20 @@
 <html>
 <head>
 	<title>myLife</title>
+	<link rel="stylesheet" type="text/css" href="./css/shared/main.css">
 	<link rel="stylesheet" type="text/css" href="./css/home.css">
+	<link rel="stylesheet" type="text/css" href="http://cdn.datatables.net/1.10.4/css/jquery.dataTables.css">
 </head>
 
 <body>
 	<div id="createTask">
-		Add Task: <input id="newTask" type="text" name="taskName">
+		Add Task: <input id="newTask" type="text" name="taskName"><input id="completeTask" type="submit" value="Complete Task" /><input id="deleteTask" type="submit" value="Delete Task"></a>
 	</div>
-	<div id="taskList"></div>
+	<table id="taskList" class="" width=""></table>
 
 	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
-	
+	<script src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+
 	<script src="./js/lib/dataModel.js"></script>
 	<script src="./js/home.js"></script>
 </body>

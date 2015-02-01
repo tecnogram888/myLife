@@ -1,3 +1,24 @@
-#createTask {
-
+td.greenBG {
+	background-color: #00FF00;
+}
+td.redBG {
+	background-color: #FF0000;
+}
+#completeTask {
+	background-color: #348e00;
+}
+#deleteTask {
+	background-color: #ee3344;
+}
+#editTask {
+	padding: 0 20px;
+	border-radius: 10px;
+	list-style: none;
+	position: relative;
+	display: inline-block;
+	background: linear-gradient(top, #efefef 0%, #bbbbbb 100$);
+	background: -moz-linear-gradient(top,#efefef 0%, #bbbbbb 100%);
+	background: -webkit-linear-gradient(top,#efefef
+	height: 20px; 0%, #bbbbbb 100%);
+	box-shadow: : 0px 0px 9px rgba(0,0,0,0,15);
 }

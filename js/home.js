@@ -43,12 +43,65 @@ myLife.home = {
 	},
 
 	displayTaskList: function(){
-		this.elements['taskList'].innerHTML = ''
-		for (property in this.model.taskList){
-			var tn = document.createTextNode(property + ' last completed');
-			var p = document.createElement('p');
-			p.appendChild(tn);
-			this.elements['taskList'].appendChild(p);
+		var self = this,
+			taskList = this.model.taskList;
+		this.elements['taskList'].innerHTML = generateTR(true);
+		$taskList = $(this.elements['taskList']);
+		$taskList.append('<tbody>');
+		for (property in taskList){
+			$taskList.append(generateTR(false, property, new Date(taskList[property])));
+		}
+		$taskList.append('</tbody>');
+		// $taskList.DataTable();
+
+		$('#completeTask').on('click', function(e) {
+			e.preventDefault();
+			var selectedTasks = $('#taskList input:checked');
+			for (i = 0; i < selectedTasks.length; i++)
+			{
+				var task = selectedTasks[i].dataset.task;
+				self.model.taskList[task] = new Date();
+				self.model.dataModel.put('taskList', JSON.stringify(self.model.taskList));
+				self.displayTaskList();
+			}
+		})
+
+		$('#deleteTask').on('click', function(e) {
+			e.preventDefault();
+			var selectedTasks = $('#taskList input:checked');
+			for (i = 0; i < selectedTasks.length; i++)
+			{
+				var task = selectedTasks[i].dataset.task;
+				delete self.model.taskList[task];
+				self.model.dataModel.put('taskList', JSON.stringify(self.model.taskList));
+				self.displayTaskList();
+			}
+		})
+
+		function generateTR(genTitle, task, timeLastCompleted){
+			if (genTitle)
+			{
+				return '<thead><tr>' + 
+				'<th>' + 'Task' + '</th>' + 
+				'<th>' + 'Completion Status' + '</th>' +
+				'<th>' + '</th>' +
+				'</tr></thead>';
+			}
+
+			var today = new Date();
+			return '<tr>' + 
+				'<td>' + task + '</td>' + 
+
+
+				'<td' + (today.toDateString() == timeLastCompleted.toDateString() ? 
+						' class="greenBG">Yes' : ' class="redBG">' + 
+
+						(Math.floor((today - timeLastCompleted)/(24*60*60*1000)))
+
+						+ ' days ago') + '</td>' +
+
+				'<td><input type="checkbox" data-task="' + task + '"/></td>'
+				'</tr>';
 		}
 	}
 };
