@@ -1,9 +1,15 @@
-// Implements the algorithm for loading modules
+/**
+	* Implements the algorithm for loading modules
+	* 
+	* ignite(dataModel) unpacks all modules from the dataModel
+ 	*/
 
-var ignition = {};
+var ignition = function(dataModel){
+	this.dataModel = dataModel;
+};
 
-ignition.ignite = function(dataModel){
-	var ignitionKey = dataModel.get('ignitionKey');
+ignition.prototype.ignite = function(dataModel){
+	this.ignitionKey = dataModel.get('ignitionKey');
 	if (!ignitionKey)
 	{
 		return;
@@ -16,5 +22,10 @@ ignition.ignite = function(dataModel){
 	}
 };
 
-ignition.unpack = function(module){
+ignition.prototype.pack = function(moduleName){
+	var ignitionKey = this.ignitionKey ? this.ignitionKey : datamodel.get('ignitionKey');
+}
+
+ignition.prototype.unpack = function(moduleName){
+	
 };
