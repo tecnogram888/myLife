@@ -1,3 +1,7 @@
+/**
+	* Requires a dataModel to be loaded prior to this file being loaded
+	*/
+
 var myLife = {}
 
 myLife.home = {
@@ -35,8 +39,10 @@ myLife.home = {
 			var keycode = (event.keyCode ? event.keyCode : event.which);
 			if (keycode == 13){
 				event.preventDefault();
-				self.model.taskList[this.value] = new Date();
-				self.model.dataModel.put('taskList', JSON.stringify(self.model.taskList));
+				// check for duplicate
+				var task = self.createTask(this.value);
+				self.model.taskList[task.id] = task;
+				localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
 				self.displayTaskList();
 			}
 		});
@@ -49,7 +55,7 @@ myLife.home = {
 		$taskList = $(this.elements['taskList']);
 		$taskList.append('<tbody>');
 		for (property in taskList){
-			$taskList.append(generateTR(false, property, new Date(taskList[property])));
+			$taskList.append(generateTR(false, taskList[property]));
 		}
 		$taskList.append('</tbody>');
 		// $taskList.DataTable();
@@ -59,9 +65,10 @@ myLife.home = {
 			var selectedTasks = $('#taskList input:checked');
 			for (i = 0; i < selectedTasks.length; i++)
 			{
-				var task = selectedTasks[i].dataset.task;
-				self.model.taskList[task] = new Date();
-				self.model.dataModel.put('taskList', JSON.stringify(self.model.taskList));
+				var taskId = selectedTasks[i].dataset.id;
+				var task = self.model.taskList[taskId];
+				task.completeTime = new Date();
+				localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
 				self.displayTaskList();
 			}
 		})
@@ -71,14 +78,14 @@ myLife.home = {
 			var selectedTasks = $('#taskList input:checked');
 			for (i = 0; i < selectedTasks.length; i++)
 			{
-				var task = selectedTasks[i].dataset.task;
-				delete self.model.taskList[task];
-				self.model.dataModel.put('taskList', JSON.stringify(self.model.taskList));
+				var taskId = selectedTasks[i].dataset.id;
+				delete self.model.taskList[taskId];
+				localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
 				self.displayTaskList();
 			}
 		})
 
-		function generateTR(genTitle, task, timeLastCompleted){
+		function generateTR(genTitle, task){
 			if (genTitle)
 			{
 				return '<thead><tr>' + 
@@ -89,20 +96,42 @@ myLife.home = {
 			}
 
 			var today = new Date();
-			return '<tr>' + 
-				'<td>' + task + '</td>' + 
-
-
-				'<td' + (today.toDateString() == timeLastCompleted.toDateString() ? 
-						' class="greenBG">Yes' : ' class="redBG">' + 
-
-						(Math.floor((today - timeLastCompleted)/(24*60*60*1000)))
-
-						+ ' days ago') + '</td>' +
-
-				'<td><input type="checkbox" data-task="' + task + '"/></td>'
-				'</tr>';
+			var tr = '<tr>' + 
+				'<td>' + task.name + '</td>';
+			if (task.completeTime){
+				tr += '<td' + (today.toDateString() == new Date(task.completeTime).toDateString() ? ' class="greenBG">Yes' : ' class="redBG">' + 
+						(Math.floor((today - task.completeTime)/(24*60*60*1000))) + ' days ago') + '</td>';
+			}
+			else
+			{
+				tr += '<td class="redBG">Incomplete<td>'
+			} 
+			tr += '<td><input type="checkbox" data-id="' + task.id + '"/></td>' + '</tr>';
+			return tr;
 		}
+	},
+
+	// Helpers
+
+	createTask: function(taskName){
+		var self = this,
+			task = {};
+		var idCounter = localStorage.getItem('taskId');
+		if (idCounter)
+		{
+			task.id = parseInt(idCounter) + 1;
+			localStorage.setItem('taskId', task.id);
+		}
+		else
+		{
+			task.id = 1;
+			localStorage.setItem('taskId', 1);
+		}
+		task.name = taskName;
+		// task.createTime = new Date();
+		task.completeTime = 0;
+		// task.completeByTime = 0;
+		return task;
 	}
 };
 

@@ -1,4 +1,5 @@
 // API for storing and getting data, so that frontend is isolated from implementation
+// set item doesn't work, why?
 
 var dataModel = {};
 
