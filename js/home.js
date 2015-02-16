@@ -65,7 +65,7 @@ myLife.home = {
 			var selectedTasks = $('#taskList input:checked');
 			for (i = 0; i < selectedTasks.length; i++)
 			{
-				var taskId = selectedTasks[i].dataset.id;
+				var taskId = getTRID(selectedTasks[i].parentElement);
 				var task = self.model.taskList[taskId];
 				task.completeTime = new Date();
 				localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
@@ -78,13 +78,14 @@ myLife.home = {
 			var selectedTasks = $('#taskList input:checked');
 			for (i = 0; i < selectedTasks.length; i++)
 			{
-				var taskId = selectedTasks[i].dataset.id;
+				var taskId = getTRID(selectedTasks[i].parentElement);
 				delete self.model.taskList[taskId];
 				localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
 				self.displayTaskList();
 			}
 		})
 
+		// ========== TR API ===============================
 		function generateTR(genTitle, task){
 			if (genTitle)
 			{
@@ -97,17 +98,22 @@ myLife.home = {
 
 			var today = new Date();
 			var tr = '<tr>' + 
-				'<td>' + task.name + '</td>';
+				'<td data-id="' + task.id + '">' + task.name + '</td>';
 			if (task.completeTime){
-				tr += '<td' + (today.toDateString() == new Date(task.completeTime).toDateString() ? ' class="greenBG">Yes' : ' class="redBG">' + 
-						(Math.floor((today - task.completeTime)/(24*60*60*1000))) + ' days ago') + '</td>';
+				tr += '<td' + (today.toDateString() == new Date(task.completeTime).toDateString() ? 
+					' class="greenBG">Yes' : 
+					' class="redBG">' + (Math.floor((today - task.completeTime)/(24*60*60*1000))) + ' days ago') + '</td>';
 			}
 			else
 			{
 				tr += '<td class="redBG">Incomplete</td>'
 			} 
-			tr += '<td><input type="checkbox" data-id="' + task.id + '"/></td>' + '</tr>';
+			tr += '<td><input type="checkbox"/></td>' + '</tr>';
 			return tr;
+		}
+
+		function getTRID(td) {
+			return td.parentElement.firstChild.dataset.id;
 		}
 	},
 
