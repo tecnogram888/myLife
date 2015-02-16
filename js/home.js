@@ -104,7 +104,7 @@ myLife.home = {
 			}
 			else
 			{
-				tr += '<td class="redBG">Incomplete<td>'
+				tr += '<td class="redBG">Incomplete</td>'
 			} 
 			tr += '<td><input type="checkbox" data-id="' + task.id + '"/></td>' + '</tr>';
 			return tr;
