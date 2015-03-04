@@ -100,9 +100,10 @@ myLife.home = {
 			var tr = '<tr>' + 
 				'<td data-id="' + task.id + '">' + task.name + '</td>';
 			if (task.completeTime){
-				tr += '<td' + (today.toDateString() == new Date(task.completeTime).toDateString() ? 
+				var completeTime = new Date(task.completeTime)
+				tr += '<td' + (today.toDateString() == completeTime.toDateString() ? 
 					' class="greenBG">Yes' : 
-					' class="redBG">' + (Math.floor((today - task.completeTime)/(24*60*60*1000))) + ' days ago') + '</td>';
+					' class="redBG">' + daysAgo(today, completeTime) + ' days ago') + '</td>';
 			}
 			else
 			{
@@ -114,6 +115,10 @@ myLife.home = {
 
 		function getTRID(td) {
 			return td.parentElement.firstChild.dataset.id;
+		}
+
+		function daysAgo(today, time) {
+			return (Math.floor((today - time)/(24*60*60*1000)))
 		}
 	},
 
