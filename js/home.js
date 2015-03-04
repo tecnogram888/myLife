@@ -107,7 +107,7 @@ myLife.home = {
 			}
 			else
 			{
-				tr += '<td class="redBG">Incomplete</td>'
+				tr += '<td class="redBG">Incomplete</td>';
 			} 
 			tr += '<td><input type="checkbox"/></td>' + '</tr>';
 			return tr;
@@ -118,7 +118,7 @@ myLife.home = {
 		}
 
 		function daysAgo(today, time) {
-			return (Math.floor((today - time)/(24*60*60*1000)))
+			return (Math.floor((today - time)/(24*60*60*1000))) + 1;
 		}
 	},
 
