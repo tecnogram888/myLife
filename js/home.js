@@ -54,7 +54,7 @@ myLife.home = {
 			{
 				var taskId = self.getTRID(selectedTasks[i].parentElement);
 				var task = self.model.taskList[taskId];
-				task.completeTime = new Date();
+				self.completeTask(task);
 				localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
 				self.displayTaskList();
 			}
@@ -101,8 +101,9 @@ myLife.home = {
 			var today = new Date();
 			var tr = '<tr>' + 
 				'<td data-id="' + task.id + '">' + task.name + '</td>';
-			if (task.completeTime){
-				var completeTime = new Date(task.completeTime);
+			var completeTime = self.getCompleteTime(task)
+			if (completeTime){
+				completeTime = new Date(completeTime);
 				var daysAgo = self.getDaysAgo(today, completeTime);
 				tr += '<td class="' + ((daysAgo <= self.getFrequency(task)) ? 'greenBG' : 'redBG') + '">'
 					+ self.getDaysAgo(today, completeTime) + ' days ago' + '</td>';
@@ -134,6 +135,7 @@ myLife.home = {
 
 	// Helpers
 
+	// TASK =========
 	createTask: function(taskName){
 		var self = this,
 		task = {};
@@ -150,11 +152,29 @@ myLife.home = {
 		}
 		task.name = taskName;
 		// task.createTime = new Date();
-		task.completeTime = 0;
+		task.completeTimes = [];
 		// task.completeByTime = 0;
 		return task;
 	},
 
+	getCompleteTime: function(task){
+		var completeTimes = task.completeTimes;
+		var nTimes = completeTimes.length;
+		if (nTimes)
+		{
+			return completeTimes[nTimes-1];
+		}
+		else
+		{
+			return 0;
+		}
+	},
+
+	completeTask: function(task){
+		task.completeTimes.push(new Date());
+	},
+
+	// TD =================
 	getTRID: function(td) {
 		return td.parentElement.firstChild.dataset.id;
 	},
