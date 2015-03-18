@@ -160,7 +160,14 @@ myLife.home = {
 	},
 
 	getDaysAgo: function(today, time) {
-		return (Math.floor((today - time)/(24*60*60*1000))) + 1;
+		if (today.toLocaleDateString() == time.toLocaleDateString())
+		{
+			return 0;
+		}
+		else
+		{
+			return (Math.floor((today - time)/(24*60*60*1000))) + 1;
+		}
 	},
 
 	getFrequency: function(task) {
