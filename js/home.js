@@ -131,6 +131,20 @@ myLife.home = {
 			localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
 			self.displayTaskList();
 		});
+
+		$('td[data-id]').on('click', function(e) {
+			var id = this.dataset.id;
+			self.displayTaskHistory(id);
+		})
+	},
+
+	displayTaskHistory: function(id)
+	{
+		var task = this.model.taskList[id];
+		console.log(task)
+		// TODO
+		// times of last completion (for editing?)
+		// 
 	},
 
 	// Helpers
