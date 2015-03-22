@@ -94,6 +94,7 @@ myLife.home = {
 				'<th>' + 'Task' + '</th>' + 
 				'<th>' + 'Completion Status' + '</th>' +
 				'<th>' + 'Frequency' + '</th>' +
+				generateCWF(true, task) +
 				'<th>' + '</th>' +
 				'</tr></thead>';
 			}
@@ -113,8 +114,31 @@ myLife.home = {
 				tr += '<td class="redBG">Incomplete</td>';
 			}
 			tr += '<td>' + '<input type="text" value="' + self.getFrequency(task) + '"/>' + '</td>'
+			tr += generateCWF(false, task);
 			tr += '<td><input type="checkbox"/></td>' + '</tr>';
 			return tr;
+		}
+
+		// completions within frequency
+		function generateCWF(genTitle, task){
+			if (genTitle)
+			{
+				return '<th>' + 'Completions within Frequency' + '</th>';
+			}
+
+			var count = 0;
+			var today = new Date();
+			var freq = self.getFrequency(task);
+			for (i in task.completeTimes)
+			{
+				var completeTime = new Date(task.completeTimes[i]);
+				if (self.getDaysAgo(today, completeTime) < freq)
+				{
+					count++;
+				}
+			}
+
+			return '<td>' + count + '</td>'
 		}
 	},
 
@@ -127,7 +151,7 @@ myLife.home = {
 			var id = self.getTRID(e.currentTarget.parentElement);
 			// Save the frequency
 			var task = self.model.taskList[id];
-			task.frequency = freq;
+			self.setFrequency(freq);
 			localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
 			self.displayTaskList();
 		});
@@ -202,6 +226,10 @@ myLife.home = {
 		{
 			return (Math.floor((today - time)/(24*60*60*1000))) + 1;
 		}
+	},
+
+	setFrequency: function(task, freq) {
+		task.frequency = freq;
 	},
 
 	getFrequency: function(task) {
