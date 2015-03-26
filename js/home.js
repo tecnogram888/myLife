@@ -151,7 +151,7 @@ myLife.home = {
 			var id = self.getTRID(e.currentTarget.parentElement);
 			// Save the frequency
 			var task = self.model.taskList[id];
-			self.setFrequency(freq);
+			self.setFrequency(task, freq);
 			localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
 			self.displayTaskList();
 		});
