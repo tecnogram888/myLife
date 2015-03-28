@@ -16,9 +16,8 @@ myLife.home = {
 	},
 
 	initElements: function(){
-		this.elements['createTask'] = document.getElementById('createTask');
 		this.elements['taskList'] = document.getElementById('taskList');
-		this.elements['newTask'] = document.getElementById('newTask');
+		this.elements['createTask'] = document.getElementById('createTask');
 	},
 
 	loadData: function(){
@@ -35,7 +34,7 @@ myLife.home = {
 	bindEvents: function(){
 		var self = this;
 
-		$(this.elements['newTask']).on('keypress', function(event){
+		$(this.elements['createTask']).on('keypress', function(event){
 			var keycode = (event.keyCode ? event.keyCode : event.which);
 			if (keycode == 13){
 				event.preventDefault();
