@@ -18,6 +18,9 @@ myLife.home = {
 	initElements: function(){
 		this.elements['taskList'] = document.getElementById('taskList');
 		this.elements['createTask'] = document.getElementById('createTask');
+		this.elements['completeTask'] = document.getElementById('completeTask');
+		this.elements['deleteTask'] = document.getElementById('deleteTask');
+		this.elements['taskFilter'] = document.getElementById('taskFilter');
 	},
 
 	loadData: function(){
@@ -46,7 +49,7 @@ myLife.home = {
 			}
 		});
 
-		$('#completeTask').on('click', function(e) {
+		$(this.elements['completeTask']).on('click', function(e) {
 			e.preventDefault();
 			var selectedTasks = $('#taskList input:checked');
 			for (i = 0; i < selectedTasks.length; i++)
@@ -59,7 +62,7 @@ myLife.home = {
 			}
 		})
 
-		$('#deleteTask').on('click', function(e) {
+		$(this.elements['deleteTask']).on('click', function(e) {
 			e.preventDefault();
 			var selectedTasks = $('#taskList input:checked');
 			for (i = 0; i < selectedTasks.length; i++)
@@ -70,11 +73,20 @@ myLife.home = {
 				self.displayTaskList();
 			}
 		})
+
+		$(this.elements['taskFilter']).on('keypress', function(event) {
+			var keycode = (event.keyCode ? event.keyCode : event.which);
+			if (keycode == 13){
+				event.preventDefault();
+				self.displayTaskList(this.value);
+			}
+		});
 	},
 
-	displayTaskList: function(){
+	displayTaskList: function(categoryFilter){
 		var self = this,
 			taskList = this.model.taskList;
+		taskList = filterTaskList(taskList, categoryFilter);
 		this.elements['taskList'].innerHTML = generateTR(true);
 		$taskList = $(this.elements['taskList']);
 		$taskList.append('<tbody>');
@@ -138,6 +150,23 @@ myLife.home = {
 			}
 
 			return '<td>' + count + '</td>'
+		}
+
+		function filterTaskList(taskList, categoryFilter){
+			if (!categoryFilter)
+			{
+				return taskList;
+			}
+			var task;
+			var filteredTaskList = [];
+			for (property in taskList)
+			{
+				task = taskList[property];
+				if (task.category && task.category.indexOf(categoryFilter) > 0)
+				{
+					filteredTaskList.push(task);
+				}
+			}
 		}
 	},
 
