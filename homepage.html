@@ -17,7 +17,15 @@
 	<table id="taskList" class="" width=""></table>
 	<div id="taskHistory"></div>
 
+	<script id="taskHistoryTemplate" type="x-tmpl-mustache">
+		<p>Task Name: {{name}}</p>
+		{{#completions}}
+		<li>{{displayCompleteTime}}
+		{{/completions}}
+	</script>
+
 	<script src="./js/vendor/jquery-1.11.0.min.js"></script>
+	<script src="./js/vendor/mustache.min.js"></script>
  <!-- <script src="http://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script> -->
 
 	<script src="./js/lib/dataModel.js"></script>

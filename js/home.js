@@ -7,9 +7,11 @@ var myLife = {}
 myLife.home = {
 	elements: {},
 	model: {dataModel: dataModel},
+	templates: {},
 
 	init: function(){
 		this.initElements();
+		this.initTemplates();
 		this.loadData();
 		this.bindEvents();
 		this.displayTaskList();
@@ -21,6 +23,11 @@ myLife.home = {
 		this.elements['completeTask'] = document.getElementById('completeTask');
 		this.elements['deleteTask'] = document.getElementById('deleteTask');
 		this.elements['taskFilter'] = document.getElementById('taskFilter');
+		this.elements['taskHistory'] = document.getElementById('taskHistory');
+	},
+
+	initTemplates: function(){
+		this.templates['taskHistory'] = $('#taskHistoryTemplate').html();
 	},
 
 	loadData: function(){
@@ -192,11 +199,28 @@ myLife.home = {
 
 	displayTaskHistory: function(id)
 	{
+		var self = this;
 		var task = this.model.taskList[id];
-		console.log(task)
+		var today = new Date();
+		var view = {
+			name: task.name,
+			completions: task.completeTimes.slice(-10).reverse(),
+			displayCompleteTime: function() {
+				var date = new Date(this);
+				var daysAgo = self.getDaysAgo(today, date);
+				return '(' + daysAgo + ' days ago) ' + date;
+			}
+			}
+
+		self.elements['taskHistory'].innerHTML = Mustache.render(self.templates['taskHistory'], view);
+
 		// TODO
 		// times of last completion (for editing?)
-		// 
+		self.bindTaskHistoryEvents();
+	},
+
+	bindTaskHistoryEvents: function(){
+
 	},
 
 	// Helpers
