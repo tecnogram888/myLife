@@ -208,7 +208,7 @@ myLife.home = {
 			displayCompleteTime: function() {
 				var date = new Date(this);
 				var daysAgo = self.getDaysAgo(today, date);
-				return '(' + daysAgo + ' days ago) ' + date;
+				return '(' + daysAgo + ' days ago) ' + formatCompleteTime(date);
 			}
 			}
 
@@ -217,6 +217,11 @@ myLife.home = {
 		// TODO
 		// times of last completion (for editing?)
 		self.bindTaskHistoryEvents();
+
+		function formatCompleteTime(date)
+		{
+			return (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+		}
 	},
 
 	bindTaskHistoryEvents: function(){
