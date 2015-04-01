@@ -19,8 +19,11 @@
 
 	<script id="taskHistoryTemplate" type="x-tmpl-mustache">
 		<p>Task Name: {{name}}</p>
+		<p>Category: <input data-id={{id}} id="taskCategory" type="text" name="taskCategory" value="{{category}}"> <input id="saveCategory" type="submit" value="Save Category" /></p>
 		{{#completions}}
-		<li>{{displayCompleteTime}}
+		<ul>
+			<li>{{displayCompleteTime}}
+		</ul>
 		{{/completions}}
 	</script>
 

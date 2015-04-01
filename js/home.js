@@ -203,7 +203,9 @@ myLife.home = {
 		var task = this.model.taskList[id];
 		var today = new Date();
 		var view = {
+			id: task.id,
 			name: task.name,
+			category: self.getCategory(task),
 			completions: task.completeTimes.slice(-10).reverse(),
 			displayCompleteTime: function() {
 				var date = new Date(this);
@@ -225,7 +227,18 @@ myLife.home = {
 	},
 
 	bindTaskHistoryEvents: function(){
+		var self = this;
 
+		$('#saveCategory').on('click', function(e) {
+			e.preventDefault();
+			var $category = $('#taskCategory'),
+			category = $category.val(),
+			id = $category.data('id');
+
+			var task = self.model.taskList[id];
+			self.setCategory(task, category);
+			localStorage.setItem('taskList', JSON.stringify(self.model.taskList));
+		});
 	},
 
 	// Helpers
@@ -287,6 +300,14 @@ myLife.home = {
 
 	setFrequency: function(task, freq) {
 		task.frequency = freq;
+	},
+
+	getCategory: function(task) {
+		return task.category;
+	},
+
+	setCategory: function(task, category) {
+		task.category = category;
 	},
 
 	getFrequency: function(task) {
