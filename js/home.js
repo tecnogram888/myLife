@@ -169,11 +169,12 @@ myLife.home = {
 			for (property in taskList)
 			{
 				task = taskList[property];
-				if (task.category && task.category.indexOf(categoryFilter) > 0)
+				if (task.category && (task.category.indexOf(categoryFilter) >= 0))
 				{
 					filteredTaskList.push(task);
 				}
 			}
+			return filteredTaskList;
 		}
 	},
 
